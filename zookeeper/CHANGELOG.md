@@ -1,6 +1,40 @@
 # CHANGELOG for zookeeper
 This file is used to list changes made in each version of zookeeper.
 
+## 2.7.0
+* Add some tests
+* Fix up zookeeper_node
+* Call runit recipe before service declaration
+
+## 2.6.0
+* Run apt::default and update at compille time if on Debian (#127)
+
+## 2.5.1
+* Report `zookeeper_config` as updated only if zoo.cfg is updated (#110)
+* Fix `zk_installed` return value (#113)
+* Fix docs (#114, #115)
+* Fix for undefined new method error (#116)
+* Always install `build-essential`, regardless of usage of `java` cookbook
+
+## 2.5.0
+* Allow configurable `data_dir` parameter for Zookeeper data directory location
+  (contributed by @eherot)
+
+## 2.4.3
+* Fix erroneous attribute reference
+
+## 2.4.2
+* Allow pre-installed Java (contributed by @solarce)
+
+## 2.4.1
+* Fixed recipe call (contributed by @solarce)
+
+## 2.4.0
+* Split out config rendering to separate recipe (contributed by @solarce)
+
+## 2.3.0
+* Split out installation to a separate recipe (contributed by @Gazzonyx)
+
 ## 2.2.1
 * Set minimum build-essential version for RHEL support (contributed by
   @Gazzonyx)

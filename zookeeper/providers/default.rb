@@ -22,10 +22,12 @@ def initialize(new_resource, run_context)
   @mirror          = new_resource.mirror
   @checksum        = new_resource.checksum
   @install_dir     = new_resource.install_dir
+  @data_dir        = new_resource.data_dir
   @dependency_gems = zk_dependency_gems
   @user_res        = zk_user_resource(@user)
   @group_res       = zk_group_resource(@group)
   @install_dir_res = zk_install_dir(@install_dir)
+  @data_dir_res    = zk_data_dir(@data_dir)
   @zk_source       = zk_source("zookeeper-#{@version}")
   @zk_install_cmd  = zk_install_command('install zookeeper')
 end
@@ -54,6 +56,12 @@ action :install do
   @install_dir_res.mode(00700)
   @install_dir_res.run_action(:create)
 
+  @data_dir_res.owner(@user)
+  @data_dir_res.group(@group)
+  @data_dir_res.recursive(true)
+  @data_dir_res.mode(00700)
+  @data_dir_res.run_action(:create)
+
   unless zk_installed?
     Chef::Log.info("Zookeeper version #{@version} not installed. Installing now!")
     @zk_install_cmd.cwd(Chef::Config[:file_cache_path])
@@ -72,37 +80,41 @@ end
 private
 
 def zk_dependency_gems
-  return ['zookeeper', 'json'].collect {|gem| Chef::Resource::ChefGem.new(gem, @run_context)}
+  %w(zookeeper json).collect { |gem| Chef::Resource::ChefGem.new(gem, @run_context) }
 end
 
-def zk_user_resource(user='')
-  return Chef::Resource::User.new(user, @run_context)
+def zk_user_resource(user = '')
+  Chef::Resource::User.new(user, @run_context)
 end
 
-def zk_group_resource(group='')
-  return Chef::Resource::Group.new(group, @run_context)
+def zk_group_resource(group = '')
+  Chef::Resource::Group.new(group, @run_context)
 end
 
-def zk_source(path='')
-  return Chef::Resource::RemoteFile.new(path, @run_context)
+def zk_source(path = '')
+  Chef::Resource::RemoteFile.new(path, @run_context)
 end
 
-def zk_install_dir(path='')
-  return Chef::Resource::Directory.new(path, @run_context)
+def zk_data_dir(path = '')
+  Chef::Resource::Directory.new(path, @run_context)
 end
 
-def zk_install_command(cmd='')
-  return Chef::Resource::Execute.new(cmd, @run_context)
+def zk_install_dir(path = '')
+  Chef::Resource::Directory.new(path, @run_context)
+end
+
+def zk_install_command(cmd = '')
+  Chef::Resource::Execute.new(cmd, @run_context)
 end
 
 def zk_installed?
-  return ::File.exists?(::File.join(@install_dir, "zookeeper-#{@version}.tar.gz"))
+  ::File.exist?(::File.join(@install_dir, "zookeeper-#{@version}", "zookeeper-#{@version}.jar"))
 end
 
 def zk_source_constructed
-  return ::File.join(@mirror, "zookeeper-#{@version}", "zookeeper-#{@version}.tar.gz")
+  ::File.join(@mirror, "zookeeper-#{@version}", "zookeeper-#{@version}.tar.gz")
 end
 
 def zk_download_path
-  return ::File.join(Chef::Config[:file_cache_path], "zookeeper-#{@version}.tar.gz")
+  ::File.join(Chef::Config[:file_cache_path], "zookeeper-#{@version}.tar.gz")
 end

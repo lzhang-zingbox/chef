@@ -1,6 +1,6 @@
-# resources/default.rb
+# recipes/config_render.rb
 #
-# Copyright 2014, Simple Finance Technology Corp.
+# Copyright 2013, Simple Finance Technology Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-actions(:install, :uninstall)
-default_action(:install)
+# set the config path based on default attributes
+config_path = ::File.join(node[:zookeeper][:install_dir],
+                          "zookeeper-#{node[:zookeeper][:version]}",
+                          'conf',
+                          'zoo.cfg')
 
-attribute :version,     kind_of: String, name_attribute: true
-attribute :mirror,      kind_of: String, required: true
-attribute :user,        kind_of: String, default: 'zookeeper'
-attribute :install_dir, kind_of: String, default: '/opt/zookeeper'
-attribute :data_dir,    kind_of: String, default: '/var/lib/zookeeper'
-attribute :checksum,    kind_of: String
+# render out our config
+zookeeper_config config_path do
+  config node[:zookeeper][:config]
+  user   node[:zookeeper][:user]
+  action :render
+end

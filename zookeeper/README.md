@@ -4,7 +4,7 @@
   - [Usage](#usage)
     - [Resources](#resources)
       - [zookeeper](#zookeeper)
-    - [discover\_zookeepers](#discover\_zookeepers)
+      - [zookeeper_config](#zookeeper_config)
   - [Errata](#errata)
   - [Author and License](#author-and-license)
 
@@ -19,6 +19,22 @@ This cookbook is primarily a library cookbook. It implements a `zookeeper`
 resource to handle the installation and configuration of Zookeeper. It ships
 with a default recipe for backwards compatibility pre-LWRP which will work
 fine, but is really just an example.
+
+For local development, you can either use Vagrant, in which case you will need
+the `vagrant-omnibus` Vagrant plugin:
+
+`vagrant plugin install vagrant-omnibus`
+
+Or, you can use Test-Kitchen, which will handle the bootstrapping for you, and
+is the preferred method for testing this cookbook (usually via a wrapper
+cookbook).
+
+### Recipes
+
+ * `zookeeper::default` : Installs and configures zookeeper. This does not start or manage the service.
+ * `zookeeper::install` : Installs the zookeeper but does not configure it.
+ * `zookeeper::config_render` : Configures zookeeper but does not install it.
+ * `zookeeper::service` : Starts and manages the zookeeper service. Requires zookeeper to be installed/configured.
 
 ### Resources
 This cookbook ships with one resource, with future plans for two more covering
@@ -48,7 +64,7 @@ zookeeper '3.4.6' do
 end
 ```
 
-#### zookeeper\_config
+#### zookeeper_config
 This resource renders a Zookeeper configuration file. Period-delimited
 parameters can be specified either as a flat hash, or by embeddeding each
 sub-section within a separate hash. See the example below for an example.
@@ -79,14 +95,24 @@ zookeeper_config '/opt/zookeeper/zookeeper-3.4.6/conf/zoo.cfg' do
 end
 ```
 
-### discover\_zookeepers
-This cookbook comes with a library to help your other cookbooks discovery the members of your ZooKeeper ensemble.
-Call it with the host of (one) of your exhibitors. We use round-robin dns so it would look like
+#### zookeeper_node
+This resource can create nodes in Zookeeper.
 
-    > discover_zookeepers("http://exhibitor.example.com:8080")
-    {"servers":["10.0.1.0","10.0.1.1","10.0.1.2"],"port":2181}
+Actions: `:create`, `:create_if_missing`, `:delete`
 
-for details on the response format, see https://github.com/Netflix/exhibitor/wiki/REST-Entities under Servers
+Parameters:
+* `path`: The zookeeper node path (default: The name of the resource)
+* `connect_str`: The zookeeper connection string (required)
+* `data`: The data to write to the node
+
+Example:
+``` ruby
+zookeeper_node '/data/myNode' do
+  action :create
+  connect_str "localhost:2181"
+  data "my data"
+end
+```
 
 ## Errata
 * Version 1.4.7 on the community site is in fact version 1.4.8.
@@ -94,3 +120,4 @@ for details on the response format, see https://github.com/Netflix/exhibitor/wik
 ## Author and License
 Simple Finance <ops@simple.com>
 Apache License, Version 2.0
+
