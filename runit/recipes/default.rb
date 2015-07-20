@@ -23,9 +23,9 @@ end
 
 execute 'start-runsvdir' do
   command value_for_platform(
-#    'debian' => { 'default' => 'runsvdir-start' },
+    'debian' => { 'default' => 'runsvdir-start' },
     'ubuntu' => { 'default' => 'start runsvdir' }
-#,    'gentoo' => { 'default' => '/etc/init.d/runit-start start' }
+,   'gentoo' => { 'default' => '/etc/init.d/runit-start start' }
   )
   action :nothing
 end
@@ -36,30 +36,30 @@ execute 'runit-hup-init' do
   action :nothing
 end
 
-#case node['platform_family']
-#when 'rhel', 'fedora'
+case node['platform_family']
+when 'rhel', 'fedora'
 
-#  packagecloud_repo 'imeyer/runit' unless node['runit']['prefer_local_yum']
-#  package 'runit'
+  packagecloud_repo 'imeyer/runit' unless node['runit']['prefer_local_yum']
+  package 'runit'
 
-#  if node['platform_version'].to_i == 7
-#    service 'runsvdir-start' do
-#      action [:start, :enable]
-#    end
-#  end
+  if node['platform_version'].to_i == 7
+    service 'runsvdir-start' do
+      action [:start, :enable]
+    end
+  end
 
-#when 'debian', 'gentoo'
+when 'debian', 'gentoo'
 
- # if platform?('gentoo')
- #   template '/etc/init.d/runit-start' do
- #     source 'runit-start.sh.erb'
- #     mode 0755
- #   end
+  if platform?('gentoo')
+    template '/etc/init.d/runit-start' do
+      source 'runit-start.sh.erb'
+      mode 0755
+    end
 
     service 'runit-start' do
       action :nothing
     end
-  #end
+  end
 
   package 'runit' do
     action :install
