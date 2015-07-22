@@ -12,8 +12,7 @@ end
 
 bash "generate instance id file" do
   user "root"
-  cwd "/var/lib"
-  mkdir zookeeper
+  cwd "/var/lib/zookeeper"
   hostname|cut -b 3 > myid
   not_if do
     File.exists("/var/lib/zookeeper/myid")
