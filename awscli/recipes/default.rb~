@@ -11,6 +11,6 @@
 # include_recipe "python"
 
 #add the awscli
-sudo apt-get install awscli
+python_pip "awscli"
 
 
