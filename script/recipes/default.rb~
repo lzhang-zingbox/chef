@@ -16,6 +16,6 @@ bash "generate instance id file" do
   hostname|cut -b 3 > myid
   EOH
   not_if do
-    File.exists("/var/lib/zookeeper/myid")
+    File.exists?("/var/lib/zookeeper/myid")
   end
 end
