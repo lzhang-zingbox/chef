@@ -1,17 +1,12 @@
-## 1.1.1 2015-05-26
+# CHANGELOG for awscli
 
-* Updated metadata.rb to show proper source and issues link on supermarket ([@nickryand][])
+This file is used to list changes made in each version of awscli.
 
-## 1.1.0 2015-05-26
+## 0.1.0:
 
-* Added owner, group, and mode parameters to the s3_file resource ([@nickryand][])
+* Initial release of awscli
 
-## 1.0.1 2015-01-10
+- - -
+Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
 
-* Updated Berksfile to point to https://supermarket.chef.io ([@nickryand][])
-
-## 1.0.0 2015-01-06
-
-Initial Release ([@nickryand][])
-
-[@nickryand]: https://github.com/nickryand
+The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.

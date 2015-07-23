@@ -1,14 +1,11 @@
-name 'awscli'
-maintainer 'Nick Downs'
-maintainer_email 'ndowns@amazon.com'
-license 'Apache 2.0'
-description 'Defines a number of LWRP wrapper commands around the awscli command line script'
+name             'awscli'
+maintainer       'EJ Bensing'
+maintainer_email 'ebensing@rm-dash-r.com'
+license          'All rights reserved'
+description      'Installs/Configures awscli'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '1.1.1'
-source_url 'https://github.com/awslabs/awscli-cookbook'
-issues_url 'https://github.com/awslabs/awscli-cookbook/issues'
+version          '0.1.0'
 
-supports 'ubuntu'
-supports 'centos'
+depends 'python'
 
-depends 'python', '~> 1.4'
+recipe 'awscli::default',   'Installs AWS CLI via PIP.'
