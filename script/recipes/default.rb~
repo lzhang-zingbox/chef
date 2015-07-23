@@ -13,7 +13,9 @@ end
 bash "generate instance id file" do
   user "root"
   cwd "/var/lib/zookeeper"
+  code <<-EOH
   hostname|cut -b 3 > myid
+  EOH
   not_if do
     File.exists("/var/lib/zookeeper/myid")
   end
