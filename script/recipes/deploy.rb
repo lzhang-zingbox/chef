@@ -1,6 +1,6 @@
 bash "update conf file" do
   user "root"
-  cwd "/test"
+  cwd "/tmp"
   code <<-EOH
     echo "tickTime=2000" > /opt/zookeeper/zookeeper-3.4.6/conf/zoo.cfg
     echo "dataDir=/var/lib/zookeeper" >> /opt/zookeeper/zookeeper-3.4.6/conf/zoo.cfg
