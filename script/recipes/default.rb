@@ -2,11 +2,11 @@ bash "add test file" do
   user "root"
   cwd "/tmp"
   code <<-EOH
-    touch hello_world 
+    host=`hostname`
+    touch ${host}
+    ifconfig eth0 |grep "inet add" | awk '{print $2}' | cut -d ":" -f2 > ${host} 
+    aws s3 cp zk* s3://instancesfolder/
   EOH
-  not_if do
-    File.exists?("/tmp/hello_world")
-  end
 end
 
 bash "generate instance id file" do
