@@ -3,9 +3,12 @@ bash "add test file" do
   cwd "/tmp"
   code <<-EOH
     host=`hostname`
+    hostid=`hostname|cut -b 3`
+    ip=`ifconfig eth0 |grep "inet add" | awk '{print $2}' | cut -d ":" -f2` 
     touch ${host}
-    ifconfig eth0 |grep "inet add" | awk '{print $2}' | cut -d ":" -f2 > ${host} 
+    echo server.${hostid}=${ip} > ${host} 
     aws s3 cp zk* s3://instancesfolder/
+    rm zk*
   EOH
 end
 
