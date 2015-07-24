@@ -8,13 +8,9 @@
 #
 
 # make sure python and pip are installed
-# include_recipe "python"
+include_recipe "python"
 
 #add the awscli
 
-bash "install aws cli" do
-  code <<-EOH  
-    sudo apt-get install awscli
-  EOH
-end
+python_pip "awscli"
 
