@@ -6,7 +6,7 @@ bash "add test file" do
     hostid=`hostname|cut -b 3`
     ip=`ifconfig eth0 |grep "inet add" | awk '{print $2}' | cut -d ":" -f2` 
     touch ${host}
-    echo server.${hostid}=${ip} > ${host} 
+    echo server.${hostid}=${ip}:2888:3888 > ${host} 
     aws s3 cp zk* s3://instancesfolder/
     rm zk*
   EOH
